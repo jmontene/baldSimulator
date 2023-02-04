@@ -4,23 +4,33 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
-    public float speed = 20.0f;
+    [SerializeField] private float _speed = 20.0f;
+    [SerializeField] private float _rotationSpeed = 1f;
 
-    private Rigidbody rb;
+    private Rigidbody _rb;
+    private Camera _camera;
 
-
-    private void Awake() {
-        rb = GetComponent<Rigidbody>();
+    private void Awake()
+    {
+        _rb = GetComponent<Rigidbody>();
+        _camera = Camera.main;
     }
 
-
     // Update is called once per frame
-    void Update() {
-        Vector2 inputVector = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        rb.velocity = (Vector3.forward * inputVector.y + Vector3.right * inputVector.x) * speed;
+    private void Update()
+    {
+        var inputVector = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical"));
 
-        if (inputVector != Vector2.zero) {
-            transform.rotation = Quaternion.LookRotation(new Vector3(inputVector.x, 0, inputVector.y));
+        var movementDirection = _camera.transform.TransformDirection(inputVector);
+        movementDirection.y = 0f;
+        movementDirection.Normalize();
+        
+        _rb.velocity = movementDirection * _speed;
+
+        if (inputVector != Vector3.zero)
+        {
+            var targetRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
         }
     }
 }
