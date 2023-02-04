@@ -7,11 +7,13 @@ public class CharacterPerceptionAI : MonoBehaviour
     [SerializeField] private float _lookDistance = 5f;
     [SerializeField] private float _lookAngle = 180f;
     [SerializeField] private int _angleDivision = 10;
+    [SerializeField] private string _checkTag;
+    [SerializeField] private LayerMask _layer;
 
-    [SerializeField] private GameObject _alertGameObject;
+    [SerializeField] private AlertUI _alert;
 
     // Update is called once per frame
-    private void Update()
+    private void FixedUpdate()
     {
         var direction = transform.forward;
         var foundTarget = Raycast(direction);
@@ -26,8 +28,11 @@ public class CharacterPerceptionAI : MonoBehaviour
             currentDirection = Quaternion.AngleAxis(-angle, Vector3.up) * direction;
             foundTarget = Raycast(currentDirection);
         }
-        
-        _alertGameObject.SetActive(foundTarget);
+
+        if (foundTarget)
+        {
+            _alert.Show();
+        }
     }
 
     private bool Raycast(Vector3 direction)
@@ -38,9 +43,9 @@ public class CharacterPerceptionAI : MonoBehaviour
         
         Debug.DrawLine(position, position + direction * _lookDistance, Color.red, Time.deltaTime);
 
-        if (Physics.Raycast(ray, out var hit, _lookDistance))
+        if (Physics.Raycast(ray, out var hit, _lookDistance, _layer.value))
         {
-            return hit.collider.gameObject.GetComponent<WanderAI>() != null;
+            return hit.collider.gameObject.tag.Equals(_checkTag);
         }
         return false;
     }

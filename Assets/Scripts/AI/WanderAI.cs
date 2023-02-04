@@ -16,7 +16,7 @@ public class WanderAI : MonoBehaviour
         
     }
 
-    private Vector3 GetRandomPoint(Vector3 center, float maxDistance)
+    private static Vector3 GetRandomPoint(Vector3 center, float maxDistance)
     {
         // Get Random Point inside Sphere which position is center, radius is maxDistance
         var randomPos = Random.insideUnitSphere * maxDistance + center;
