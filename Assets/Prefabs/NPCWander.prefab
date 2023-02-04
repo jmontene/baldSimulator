@@ -17,7 +17,9 @@ GameObject:
   - component: {fileID: 2866044003489935744}
   - component: {fileID: 4006283933202059633}
   - component: {fileID: 6424067743762794453}
+  - component: {fileID: 2906492548534573716}
   - component: {fileID: 8602967924987487493}
+  - component: {fileID: 70474623875219419}
   m_Layer: 6
   m_Name: NPCWander
   m_TagString: Untagged
@@ -169,7 +171,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2866044003489935746}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f8bdfc88abd6045d5bc28507c538f312, type: 3}
   m_Name: 
@@ -194,7 +196,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c18403247535406a8338b4b4aa16334, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _escapeSpeed: 8
+  _escapeSpeed: 7
+--- !u!114 &2906492548534573716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2866044003489935746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae2efca8448f5d5b6b0b7593a5fb4f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _holder: {fileID: 0}
+  _angleLimit: 120
+  _angleSpeed: 40
+  _changeSignMinDelay: 0.5
+  _changeSignMaxDelay: 2
 --- !u!114 &8602967924987487493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,6 +229,35 @@ MonoBehaviour:
   _wanderAI: {fileID: 2866044003489935744}
   _perceptionAI: {fileID: 4006283933202059633}
   _escapeAI: {fileID: 6424067743762794453}
+  _breakFreeAI: {fileID: 2906492548534573716}
+  _currentState: 0
+--- !u!54 &70474623875219419
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2866044003489935746}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 80
+  m_CollisionDetection: 0
 --- !u!1 &4520762148577266726
 GameObject:
   m_ObjectHideFlags: 0

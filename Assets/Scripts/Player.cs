@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Rewired;
 
@@ -7,13 +8,21 @@ public class Player : MonoBehaviour
     [SerializeField] private float _speed = 20.0f;
     [SerializeField] private float _rotationSpeed = 1f;
 
+    [Header("Grab Raycast")]
+    [SerializeField] private float _raycastRadius = 1f;
+    [SerializeField] private float _raycastDistance = 1f;
+    [SerializeField] private LayerMask _raycastLayer;
+
     private Rigidbody _rb;
     private Camera _camera;
     private Rewired.Player _inputPlayer;
     private bool _isGrabbing;
+    private PersonAI _grabbedPerson;
+    private Collider[] _colliders;
 
     private void Awake()
     {
+        _colliders = new Collider[10];
         _rb = GetComponent<Rigidbody>();
         _camera = Camera.main;
         _inputPlayer = ReInput.players.GetPlayer(_inputPlayerId);
@@ -33,11 +42,41 @@ public class Player : MonoBehaviour
         if (grab && !_isGrabbing)
         {
             _isGrabbing = true;
+            if (AttemptToGrab(out var person))
+            {
+                _grabbedPerson = person;
+                _grabbedPerson.AttemptToBreakFree(transform);
+            }
         }
         else if (!grab && _isGrabbing)
         {
             _isGrabbing = false;
+            if (_grabbedPerson != null)
+            {
+                _grabbedPerson.BreakFree();
+                _grabbedPerson = null;
+            }
         }
+    }
+
+    private bool AttemptToGrab(out PersonAI person)
+    {
+        person = null;
+        var currentTransform = transform;
+
+        var origin = currentTransform.position + _raycastDistance * currentTransform.forward;
+
+        var size = Physics.OverlapSphereNonAlloc(origin, _raycastRadius, _colliders, _raycastLayer.value);
+
+        if (size == 0) return false;
+
+        for (var i = 0; i < size; i++)
+        {
+            person = _colliders[i].GetComponent<PersonAI>();
+            if (person != null) return true;
+        }
+
+        return false;
     }
 
     private bool CanMove()

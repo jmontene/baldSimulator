@@ -29,4 +29,9 @@ public class EscapeAI : MonoBehaviour
     {
         Destroy(gameObject);
     }
+
+    public void Stop()
+    {
+        _agent.Stop();
+    }
 }

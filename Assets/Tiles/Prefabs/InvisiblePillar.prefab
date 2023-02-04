@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1832965125265085487}
   - component: {fileID: 5424552417724373759}
   - component: {fileID: 7681870035507181256}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -116,7 +116,7 @@ GameObject:
   - component: {fileID: 4618800910306261115}
   - component: {fileID: 4618800910309161051}
   - component: {fileID: 4618800910308162203}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: InvisiblePillar
   m_TagString: Untagged
   m_Icon: {fileID: 0}

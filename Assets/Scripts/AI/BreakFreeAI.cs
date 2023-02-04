@@ -12,6 +12,8 @@ public class BreakFreeAI : MonoBehaviour
     [SerializeField] private float _changeSignMinDelay = 3f;
     [SerializeField] private float _changeSignMaxDelay = 6f;
 
+    public Action OnReleased { get; set; }
+    
     private Rigidbody _rb;
     private Vector3 _startDirection;
     private int _currentSign = 1;
@@ -20,6 +22,11 @@ public class BreakFreeAI : MonoBehaviour
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
+    }
+
+    public void Init(Transform holder)
+    {
+        _holder = holder;
         _startDirection = GetCurrentDirection();
         SetChangeSignDelay();
     }
@@ -31,7 +38,9 @@ public class BreakFreeAI : MonoBehaviour
 
     // Update is called once per frame
     private void FixedUpdate()
-    {   
+    {
+        if (_holder == null) return;
+        
         UpdateChangeSign();
         
         var currentDirection = GetCurrentDirection();
@@ -66,5 +75,10 @@ public class BreakFreeAI : MonoBehaviour
     private void SetChangeSignDelay()
     {
         _changeSignDelay = Random.Range(_changeSignMinDelay, _changeSignMaxDelay);
+    }
+
+    public void Release()
+    {
+        _holder = null;
     }
 }
