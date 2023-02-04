@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
@@ -9,8 +10,9 @@ public class CharacterPerceptionAI : MonoBehaviour
     [SerializeField] private int _angleDivision = 10;
     [SerializeField] private string _checkTag;
     [SerializeField] private LayerMask _layer;
-
     [SerializeField] private AlertUI _alert;
+
+    public Action OnTargetFound { get; set; }
 
     // Update is called once per frame
     private void FixedUpdate()
@@ -32,6 +34,7 @@ public class CharacterPerceptionAI : MonoBehaviour
         if (foundTarget)
         {
             _alert.Show();
+            OnTargetFound?.Invoke();
         }
     }
 

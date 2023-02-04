@@ -7,13 +7,12 @@ public class WanderAI : MonoBehaviour
 {
     [SerializeField] private float _maxDistance = 10f;
     
-    private NavMeshAgent _agent;
+    private NavMeshAgentHandler _agent;
 
     // Start is called before the first frame update
-    private void Start()
+    private void Awake()
     {
-        _agent = GetComponent<NavMeshAgent>();
-        
+        _agent = GetComponent<NavMeshAgentHandler>();
     }
 
     private static Vector3 GetRandomPoint(Vector3 center, float maxDistance)
@@ -27,37 +26,13 @@ public class WanderAI : MonoBehaviour
         return hit.position;
     }
 
-    private void SetNewDestination()
-    {
-        _agent.SetDestination(GetRandomPoint(_agent.transform.position, _maxDistance));
-    }
-
     public void Wander()
     {
-        _agent.isStopped = false;
-        SetNewDestination();
+        _agent.SetNewDestination(GetRandomPoint(_agent.transform.position, _maxDistance), Wander);
     }
 
     public void Stop()
     {
-        _agent.isStopped = true;
-    }
-
-    private bool IsPathCompleted()
-    {
-        if (_agent.pathPending) return false;
-        if (_agent.remainingDistance > _agent.stoppingDistance) return false;
-        return !_agent.hasPath && Mathf.Approximately(_agent.velocity.sqrMagnitude, 0f);
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-        if (_agent.isStopped) return;
-        
-        if (IsPathCompleted())
-        {
-            SetNewDestination();
-        }
+        _agent.Stop();
     }
 }

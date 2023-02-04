@@ -7,7 +7,7 @@ public class LookAtCamera : MonoBehaviour
     private Camera _mainCamera;
     
     // Start is called before the first frame update
-    private void Start()
+    private void Awake()
     {
         _mainCamera = Camera.main;
     }
