@@ -184,6 +184,7 @@ GameObject:
   - component: {fileID: 4728946692980574063}
   - component: {fileID: 4728946692980574062}
   - component: {fileID: 4728946692980574061}
+  - component: {fileID: 2687512818418729044}
   m_Layer: 5
   m_Name: LookAlert
   m_TagString: Untagged
@@ -274,3 +275,15 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &2687512818418729044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4728946692980574060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2c97c34c3a9bc131a1b522b300c3786, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
