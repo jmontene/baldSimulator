@@ -109,6 +109,7 @@ public class Player : MonoBehaviour
         if (!CanMove())
         {
             _rb.velocity = Vector3.zero;
+            _animator.SetFloat(SpeedAnimKey, 0);
             return;
         }
         
