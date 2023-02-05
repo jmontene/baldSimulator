@@ -4,6 +4,8 @@ using Rewired;
 
 public class Player : MonoBehaviour
 {
+    private static readonly int SpeedAnimKey = Animator.StringToHash("Speed");
+    
     [SerializeField] private int _inputPlayerId = 0;
     [SerializeField] private float _speed = 20.0f;
     [SerializeField] private float _rotationSpeed = 1f;
@@ -14,6 +16,7 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask _raycastLayer;
 
     private Rigidbody _rb;
+    private Animator _animator;
     private Camera _camera;
     private Rewired.Player _inputPlayer;
     private bool _isGrabbing;
@@ -24,6 +27,7 @@ public class Player : MonoBehaviour
     {
         _colliders = new Collider[10];
         _rb = GetComponent<Rigidbody>();
+        _animator = GetComponentInChildren<Animator>();
         _camera = Camera.main;
         _inputPlayer = ReInput.players.GetPlayer(_inputPlayerId);
     }
@@ -94,6 +98,7 @@ public class Player : MonoBehaviour
         
         var movementDirection = GetMovementDirection();
         _rb.velocity = movementDirection * _speed;
+        _animator.SetFloat(SpeedAnimKey, _rb.velocity.sqrMagnitude);
 
         if (movementDirection == Vector3.zero) return;
         

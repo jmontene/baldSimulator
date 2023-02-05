@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PersonAI : MonoBehaviour
 {
+    private static readonly int EscapingAnimKey = Animator.StringToHash("Escaping");
+    
     private enum State
     {
         None,
@@ -21,9 +23,11 @@ public class PersonAI : MonoBehaviour
     [SerializeField] private State _currentState;
 
     private bool _hasHair = true;
+    private Animator _animator;
 
     private void Start()
     {
+        _animator = GetComponentInChildren<Animator>();
         _currentState = State.None;
         _perceptionAI.OnTargetFound = Escape;
         _breakFreeAI.OnReleased = Escape;
@@ -40,6 +44,7 @@ public class PersonAI : MonoBehaviour
 
     private void Escape()
     {
+        StartEscapeAnimation();
         SetNewState(State.Escape);
         
         _escapeAI.Escape();
@@ -54,7 +59,8 @@ public class PersonAI : MonoBehaviour
     public void AttemptToBreakFree(Player holder)
     {
         if (!_hasHair) return;
-        
+
+        StartEscapeAnimation();
         SetNewState(State.BreakFree);
 
         _breakFreeAI.Init(holder);
@@ -99,5 +105,10 @@ public class PersonAI : MonoBehaviour
     public void DetachHair()
     {
         _hasHair = false;
+    }
+
+    private void StartEscapeAnimation()
+    {
+        _animator.SetTrigger(EscapingAnimKey);
     }
 }
