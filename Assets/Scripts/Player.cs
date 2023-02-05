@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     private static readonly int SpeedAnimKey = Animator.StringToHash("Speed");
     private static readonly int GrabbingAnimKey = Animator.StringToHash("Grabbing");
+    private static readonly int GrabbingStartAnimKey = Animator.StringToHash("GrabbingStart");
     
     [SerializeField] private int _inputPlayerId = 0;
     [SerializeField] private float _speed = 20.0f;
@@ -57,15 +58,13 @@ public class Player : MonoBehaviour
     private void Grab()
     {
         _isGrabbing = true;
-        _animator.SetBool(GrabbingAnimKey, true);
+        
+        _animator.SetTrigger(GrabbingStartAnimKey);
         if (AttemptToGrab(out var person))
         {
+            _animator.SetBool(GrabbingAnimKey, true);
             _grabbedPerson = person;
             _grabbedPerson.AttemptToBreakFree(this);
-        }
-        else
-        {
-            _animator.SetBool(GrabbingAnimKey, false);
         }
     }
 
