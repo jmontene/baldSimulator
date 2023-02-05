@@ -107,7 +107,10 @@ public class BreakFreeAI : MonoBehaviour
     {
         var q = Quaternion.AngleAxis(angle, axis);
         _rb.MovePosition(q * (_rb.transform.position - origin) + origin);
-        _rb.MoveRotation(_rb.transform.rotation * q);
+        
+        var lookRef = transform.position - origin;
+        var lookRot = Quaternion.LookRotation(lookRef, Vector3.up);
+        _rb.MoveRotation(lookRot);
     }
 
     private void UpdateChangeSign()

@@ -68,6 +68,13 @@ public class Player : MonoBehaviour
         {
             ReleaseGrab();
         }
+
+        if (_isGrabbing && _grabbedPerson != null)
+        {
+            var lookRef = _grabbedPerson.transform.position - transform.position;
+            var lookRot = Quaternion.LookRotation(lookRef, Vector3.up);
+            transform.rotation = lookRot;
+        }
     }
 
     private void Grab()
