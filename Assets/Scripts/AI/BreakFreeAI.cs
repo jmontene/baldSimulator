@@ -46,16 +46,20 @@ public class BreakFreeAI : MonoBehaviour
         return (transform.position - _holder.transform.position).normalized;
     }
 
-    private bool HolderHasCorrectInput() {
-        Vector3 holderInput = _holder.GetInputVector();
-        float xDiff = transform.position.x - _holder.transform.position.x;
-        float zDiff = transform.position.z - _holder.transform.position.z;
+    private bool HolderHasCorrectInput()
+    {
+        var holderInput = _holder.GetInputVector();
+        var position = transform.position;
+        var holderPosition = _holder.transform.position;
+        
+        var xDiff = position.x - holderPosition.x;
+        var zDiff = position.z - holderPosition.z;
 
-        float correctSignX = (xDiff > 0) ? -1f : 1f;
-        float correctSignZ = (zDiff > 0) ? -1f : 1f;
+        var correctSignX = (xDiff > 0) ? -1f : 1f;
+        var correctSignZ = (zDiff > 0) ? -1f : 1f;
 
-        bool correctSigns = Mathf.Sign(holderInput.x) == correctSignX && Mathf.Sign(holderInput.z) == correctSignZ;
-        bool hasDiagonalInput = holderInput.x != 0f && holderInput.z != 0f;
+        var correctSigns = Mathf.Approximately(Mathf.Sign(holderInput.x),correctSignX) && Mathf.Approximately(Mathf.Sign(holderInput.z),correctSignZ);
+        var hasDiagonalInput = holderInput.x != 0f && holderInput.z != 0f;
         return correctSigns && hasDiagonalInput;
     }
 
@@ -76,23 +80,26 @@ public class BreakFreeAI : MonoBehaviour
         RotateAround(_holder.transform.position, Vector3.up, movement);
     }
 
-    private void Update() {
+    private void Update() 
+    {
         if (_holder == null) return;
 
         _timerUI.SetPercentage(1f - (_currentDefeatTime / _holder.DefeatTime));
-        if (HolderHasCorrectInput()) {
+        
+        if (HolderHasCorrectInput())
+        {
             _currentDefeatTime -= Time.deltaTime;
-            if (_currentDefeatTime <= 0) {
-                _holder.Stun();
-                RemoveHolder();
-                OnDefeated.Invoke();
-            }
-        } else {
+            if (!(_currentDefeatTime <= 0)) return;
+            //_holder.Stun();
+            RemoveHolder();
+            OnDefeated.Invoke();
+        } 
+        else 
+        {
             _currentEscapeTime -= Time.deltaTime;
-            if (_currentEscapeTime <= 0) {
-                _holder.Stun();
-                Release();
-            }
+            if (!(_currentEscapeTime <= 0)) return;
+            _holder.Stun();
+            Release();
         }
     }
 
@@ -120,21 +127,22 @@ public class BreakFreeAI : MonoBehaviour
         _changeSignDelay = Random.Range(_changeSignMinDelay, _changeSignMaxDelay);
     }
 
-    public void Release()
+    private void Release()
     {
         RemoveHolder();
-        OnReleased.Invoke();
+        OnReleased?.Invoke();
     }
 
-    private void RemoveHolder() {
-        if (_holder == null) {
-            return;
-        }
+    private void RemoveHolder()
+    {
+        if (_holder == null) return;
+        
         _holder = null;
-        _timerUI.Hide();
+        HideTimer();
     }
 
-    public void HideTimer() {
+    public void HideTimer()
+    {
         _timerUI.Hide();
     }
 }

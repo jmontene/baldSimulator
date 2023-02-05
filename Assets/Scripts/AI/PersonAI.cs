@@ -20,6 +20,7 @@ public class PersonAI : MonoBehaviour
     [SerializeField] private EscapeAI _escapeAI;
     [SerializeField] private BreakFreeAI _breakFreeAI;
     [SerializeField] private GameObject _hairObject;
+    [SerializeField] private float _hairDestroyTime = 5f;
 
     [SerializeField] private State _currentState;
 
@@ -105,13 +106,17 @@ public class PersonAI : MonoBehaviour
         return _currentState == State.Escape;
     }
 
-    public void DetachHair()
+    private void DetachHair()
     {
         _hasHair = false;
-        _hairObject.SetActive(false);
+        
+        _hairObject.transform.SetParent(null, true);
+        _hairObject.GetComponent<Rigidbody>().isKinematic = false;
+        Destroy(_hairObject, _hairDestroyTime);
     }
 
-    public void Defeat() {
+    private void Defeat()
+    {
         DetachHair();
         BreakFree();
     }

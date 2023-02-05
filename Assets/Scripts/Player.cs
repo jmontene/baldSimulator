@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float _speed = 20.0f;
     [SerializeField] private float _rotationSpeed = 1f;
     [SerializeField] private float _stunTime = 2f;
-    public float DefeatTime = 3f;
+    [SerializeField] private float _defeatTime = 3f;
 
     [Header("Grab Raycast")]
     [SerializeField] private float _raycastRadius = 1f;
@@ -28,6 +28,8 @@ public class Player : MonoBehaviour
     private Collider[] _colliders;
     private bool _stunned = false;
     private float _currentStunTime = 0f;
+    
+    public float DefeatTime => _defeatTime;
 
     private void Awake()
     {
@@ -41,22 +43,29 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (_stunned) {
+        if (_stunned)
+        {
             _currentStunTime -= Time.deltaTime;
-            if (_currentStunTime <= 0f) {
+            
+            if (_currentStunTime <= 0f)
+            {
                 _stunned = false;
             }
             return;
         }
+        
         CheckGrab();
         UpdateMovement();
     }
 
     private void CheckGrab()
     {
-        if (_inputPlayer.GetButtonDown("Primary") && !_isGrabbing) {
+        if (_inputPlayer.GetButtonDown("Primary") && !_isGrabbing)
+        {
             Grab();
-        } else if (_inputPlayer.GetButtonUp("Primary") && _isGrabbing) {
+        }
+        else if (_inputPlayer.GetButtonUp("Primary") && _isGrabbing)
+        {
             ReleaseGrab();
         }
     }
@@ -129,19 +138,24 @@ public class Player : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
     }
 
-    public Vector3 GetInputVector() {
+    public Vector3 GetInputVector()
+    {
         return new Vector3(_inputPlayer.GetAxisRaw("Horizontal"), 0f, _inputPlayer.GetAxisRaw("Vertical"));
     }
 
-    public void Stun() {
-        if (_isGrabbing) {
+    public void Stun()
+    {
+        if (_isGrabbing)
+        {
             ReleaseGrab();
         }
+        
         _stunned = true;
         _currentStunTime = _stunTime;
     }
 
-    public Vector3 GetMovementDirection() {
+    public Vector3 GetMovementDirection()
+    {
         var inputVector = GetInputVector();
         
         var movementDirection = _camera.transform.TransformDirection(inputVector);
