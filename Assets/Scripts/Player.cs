@@ -43,7 +43,8 @@ public class Player : MonoBehaviour
 
     private void CheckGrab()
     {
-        var grab = Mathf.CeilToInt(_inputPlayer.GetAxis("Primary")) == 1;
+        var inputValue = _inputPlayer.GetAxis("Primary");
+        var grab = inputValue > 0.1f;
 
         if (grab && !_isGrabbing)
         {
