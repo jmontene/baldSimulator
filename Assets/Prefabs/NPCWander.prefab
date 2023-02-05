@@ -3265,7 +3265,7 @@ Transform:
   - {fileID: 2162603755173132018}
   - {fileID: 2984572052877155059}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &2866044003489935745
 CapsuleCollider:
@@ -3306,7 +3306,7 @@ NavMeshAgent:
   m_AngularSpeed: 120
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 0
+  m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 1
   m_BaseOffset: 0
@@ -3406,6 +3406,7 @@ MonoBehaviour:
   _escapeAI: {fileID: 6424067743762794453}
   _breakFreeAI: {fileID: 2906492548534573716}
   _hairObject: {fileID: 1099733762557872245}
+  _hairDestroyTime: 5
   _currentState: 0
 --- !u!54 &70474623875219419
 Rigidbody:
