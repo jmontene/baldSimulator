@@ -11,11 +11,11 @@ public class BreakFreeAI : MonoBehaviour
     [SerializeField] private float _angleSpeed = 10f;
     [SerializeField] private float _changeSignMinDelay = 3f;
     [SerializeField] private float _changeSignMaxDelay = 6f;
-    [SerializeField] private float _struggleDistance = 1f;
     [SerializeField] private float _escapeTime = 5f;
     [SerializeField] private TimerUI _timerUI;
 
     public Action OnReleased { get; set; }
+    public Action OnDefeated { get; set; }
     
     private Rigidbody _rb;
     private Vector3 _startDirection;
@@ -32,6 +32,7 @@ public class BreakFreeAI : MonoBehaviour
     public void Init(Player holder)
     {
         _timerUI.Show();
+        _timerUI.SetPercentage(0f);
         _holder = holder;
         _startDirection = GetCurrentDirection();
         _currentEscapeTime = _escapeTime;
@@ -47,20 +48,15 @@ public class BreakFreeAI : MonoBehaviour
 
     private bool HolderHasCorrectInput() {
         Vector3 holderInput = _holder.GetInputVector();
-        float correctSignX = 0f;
-        float correctSignZ = 0f;
         float xDiff = transform.position.x - _holder.transform.position.x;
         float zDiff = transform.position.z - _holder.transform.position.z;
 
-        if (Mathf.Abs(xDiff) > _struggleDistance) {
-            correctSignX = (xDiff > 0) ? -1f : 1f; 
-        }
+        float correctSignX = (xDiff > 0) ? -1f : 1f;
+        float correctSignZ = (zDiff > 0) ? -1f : 1f;
 
-        if (Mathf.Abs(zDiff) > _struggleDistance) {
-            correctSignZ = (zDiff > 0) ? -1f : 1f;
-        }
-
-        return Mathf.Sign(holderInput.x) == correctSignX && Mathf.Sign(holderInput.z) == correctSignZ;
+        bool correctSigns = Mathf.Sign(holderInput.x) == correctSignX && Mathf.Sign(holderInput.z) == correctSignZ;
+        bool hasDiagonalInput = holderInput.x != 0f && holderInput.z != 0f;
+        return correctSigns && hasDiagonalInput;
     }
 
     // Update is called once per frame
@@ -83,10 +79,13 @@ public class BreakFreeAI : MonoBehaviour
     private void Update() {
         if (_holder == null) return;
 
+        _timerUI.SetPercentage(1f - (_currentDefeatTime / _holder.DefeatTime));
         if (HolderHasCorrectInput()) {
             _currentDefeatTime -= Time.deltaTime;
             if (_currentDefeatTime <= 0) {
-                Destroy(gameObject);
+                _holder.Stun();
+                RemoveHolder();
+                OnDefeated.Invoke();
             }
         } else {
             _currentEscapeTime -= Time.deltaTime;
@@ -123,11 +122,19 @@ public class BreakFreeAI : MonoBehaviour
 
     public void Release()
     {
+        RemoveHolder();
+        OnReleased.Invoke();
+    }
+
+    private void RemoveHolder() {
         if (_holder == null) {
             return;
         }
         _holder = null;
-        OnReleased.Invoke();
+        _timerUI.Hide();
+    }
+
+    public void HideTimer() {
         _timerUI.Hide();
     }
 }

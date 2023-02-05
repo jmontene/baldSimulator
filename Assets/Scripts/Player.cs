@@ -74,7 +74,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void ReleaseGrab()
+    public void ReleaseGrab()
     {
         _isGrabbing = false;
         _animator.SetBool(GrabbingAnimKey, false);

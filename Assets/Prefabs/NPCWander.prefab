@@ -3359,6 +3359,8 @@ MonoBehaviour:
   _angleSpeed: 40
   _changeSignMinDelay: 0.5
   _changeSignMaxDelay: 2
+  _struggleDistance: 0.2
+  _escapeTime: 5
   _timerUI: {fileID: 6476993627435216594}
 --- !u!114 &8602967924987487493
 MonoBehaviour:
@@ -9331,6 +9333,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2866044003489935756}
     m_Modifications:
+    - target: {fileID: 1416609654723572279, guid: 27d3bbcda3766c7fdacc6e20fa28229d, type: 3}
+      propertyPath: m_FillAmount
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4728946691599274300, guid: 27d3bbcda3766c7fdacc6e20fa28229d, type: 3}
       propertyPath: m_IsActive
       value: 0

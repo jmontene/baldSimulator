@@ -32,6 +32,7 @@ public class PersonAI : MonoBehaviour
         _currentState = State.None;
         _perceptionAI.OnTargetFound = Escape;
         _breakFreeAI.OnReleased = Escape;
+        _breakFreeAI.OnDefeated = Defeat;
         Wander();
     }
 
@@ -70,7 +71,8 @@ public class PersonAI : MonoBehaviour
     public void BreakFree()
     {
         if (_currentState != State.BreakFree) return;
-        
+
+        _breakFreeAI.HideTimer();
         Escape();
     }
 
@@ -90,7 +92,7 @@ public class PersonAI : MonoBehaviour
             }
             case State.BreakFree:
             {
-                _breakFreeAI.Release();
+                // _breakFreeAI.Release();
                 break;
             }
         }
@@ -107,6 +109,11 @@ public class PersonAI : MonoBehaviour
     {
         _hasHair = false;
         _hairObject.SetActive(false);
+    }
+
+    public void Defeat() {
+        DetachHair();
+        BreakFree();
     }
 
     private void StartEscapeAnimation()
