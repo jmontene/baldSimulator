@@ -3235,7 +3235,7 @@ Transform:
   - {fileID: 4911132694692807672}
   - {fileID: 2162603755173132018}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &2866044003489935745
 CapsuleCollider:
@@ -3373,6 +3373,7 @@ MonoBehaviour:
   _perceptionAI: {fileID: 4006283933202059633}
   _escapeAI: {fileID: 6424067743762794453}
   _breakFreeAI: {fileID: 2906492548534573716}
+  _hairObject: {fileID: 1099733762557872245}
   _currentState: 0
 --- !u!54 &70474623875219419
 Rigidbody:

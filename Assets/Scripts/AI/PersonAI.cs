@@ -19,6 +19,7 @@ public class PersonAI : MonoBehaviour
     [SerializeField] private CharacterPerceptionAI _perceptionAI;
     [SerializeField] private EscapeAI _escapeAI;
     [SerializeField] private BreakFreeAI _breakFreeAI;
+    [SerializeField] private GameObject _hairObject;
 
     [SerializeField] private State _currentState;
 
@@ -105,6 +106,7 @@ public class PersonAI : MonoBehaviour
     public void DetachHair()
     {
         _hasHair = false;
+        _hairObject.SetActive(false);
     }
 
     private void StartEscapeAnimation()
