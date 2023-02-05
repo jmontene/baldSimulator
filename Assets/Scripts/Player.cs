@@ -45,7 +45,7 @@ public class Player : MonoBehaviour
             if (AttemptToGrab(out var person))
             {
                 _grabbedPerson = person;
-                _grabbedPerson.AttemptToBreakFree(transform);
+                _grabbedPerson.AttemptToBreakFree(this);
             }
         }
         else if (!grab && _isGrabbing)
@@ -88,21 +88,27 @@ public class Player : MonoBehaviour
     {
         if (!CanMove())
         {
-            _rb.velocity = Vector2.zero;
+            _rb.velocity = Vector3.zero;
             return;
         }
         
-        var inputVector = new Vector3(_inputPlayer.GetAxisRaw("Horizontal"), 0f, _inputPlayer.GetAxisRaw("Vertical"));
-
-        var movementDirection = _camera.transform.TransformDirection(inputVector);
-        movementDirection.y = 0f;
-        movementDirection.Normalize();
-        
+        var movementDirection = GetMovementDirection();
         _rb.velocity = movementDirection * _speed;
 
-        if (inputVector == Vector3.zero) return;
+        if (movementDirection == Vector3.zero) return;
         
         var targetRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+    }
+
+    public Vector3 GetMovementDirection()
+    {
+        var inputVector = new Vector3(_inputPlayer.GetAxisRaw("Horizontal"), 0f, _inputPlayer.GetAxisRaw("Vertical"));
+        
+        var movementDirection = _camera.transform.TransformDirection(inputVector);
+        movementDirection.y = 0f;
+        movementDirection.Normalize();
+
+        return movementDirection;
     }
 }

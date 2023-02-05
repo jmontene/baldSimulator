@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 public class BreakFreeAI : MonoBehaviour
 {
-    [SerializeField] private Transform _holder;
+    [SerializeField] private Player _holder;
     [SerializeField] private float _angleLimit = 180f;
     [SerializeField] private float _angleSpeed = 10f;
     [SerializeField] private float _changeSignMinDelay = 3f;
@@ -24,7 +24,7 @@ public class BreakFreeAI : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
     }
 
-    public void Init(Transform holder)
+    public void Init(Player holder)
     {
         _holder = holder;
         _startDirection = GetCurrentDirection();
@@ -33,7 +33,7 @@ public class BreakFreeAI : MonoBehaviour
 
     private Vector3 GetCurrentDirection()
     {
-        return (transform.position - _holder.position).normalized;
+        return (transform.position - _holder.transform.position).normalized;
     }
 
     // Update is called once per frame

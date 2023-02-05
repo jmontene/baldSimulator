@@ -20,6 +20,8 @@ public class PersonAI : MonoBehaviour
 
     [SerializeField] private State _currentState;
 
+    private bool _hasHair = true;
+
     private void Start()
     {
         _currentState = State.None;
@@ -49,8 +51,10 @@ public class PersonAI : MonoBehaviour
         _perceptionAI.enabled = false;
     }
 
-    public void AttemptToBreakFree(Transform holder)
+    public void AttemptToBreakFree(Player holder)
     {
+        if (!_hasHair) return;
+        
         SetNewState(State.BreakFree);
 
         _breakFreeAI.Init(holder);
@@ -90,5 +94,10 @@ public class PersonAI : MonoBehaviour
     public bool IsEscaping()
     {
         return _currentState == State.Escape;
+    }
+
+    public void DetachHair()
+    {
+        _hasHair = false;
     }
 }
