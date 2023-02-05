@@ -63,6 +63,10 @@ public class Player : MonoBehaviour
             _grabbedPerson = person;
             _grabbedPerson.AttemptToBreakFree(this);
         }
+        else
+        {
+            _animator.SetBool(GrabbingAnimKey, false);
+        }
     }
 
     private void ReleaseGrab()
