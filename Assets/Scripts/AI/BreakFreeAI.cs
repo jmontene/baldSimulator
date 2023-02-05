@@ -121,6 +121,9 @@ public class BreakFreeAI : MonoBehaviour
 
     public void Release()
     {
+        if (_holder == null) {
+            return;
+        }
         _holder = null;
         OnReleased.Invoke();
     }

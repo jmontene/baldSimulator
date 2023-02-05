@@ -54,15 +54,9 @@ public class Player : MonoBehaviour
 
     private void CheckGrab()
     {
-        var inputValue = _inputPlayer.GetAxis("Primary");
-        var grab = inputValue > 0.1f;
-
-        if (grab && !_isGrabbing)
-        {
+        if (_inputPlayer.GetButtonDown("Primary") && !_isGrabbing) {
             Grab();
-        }
-        else if (!grab && _isGrabbing)
-        {
+        } else if (_inputPlayer.GetButtonUp("Primary") && _isGrabbing) {
             ReleaseGrab();
         }
     }
@@ -140,6 +134,9 @@ public class Player : MonoBehaviour
     }
 
     public void Stun() {
+        if (_isGrabbing) {
+            ReleaseGrab();
+        }
         _stunned = true;
         _currentStunTime = _stunTime;
     }
