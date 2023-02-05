@@ -5185,7 +5185,7 @@ Transform:
   m_Children:
   - {fileID: 3280380073517873753}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &5388661321907000449
 CapsuleCollider:
@@ -5225,8 +5225,8 @@ MonoBehaviour:
   _inputPlayerId: 0
   _speed: 20
   _rotationSpeed: 10
-  _raycastRadius: 1.5
-  _raycastDistance: 1
+  _raycastRadius: 1
+  _raycastDistance: 0
   _raycastLayer:
     serializedVersion: 2
     m_Bits: 64

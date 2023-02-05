@@ -5,6 +5,7 @@ using Rewired;
 public class Player : MonoBehaviour
 {
     private static readonly int SpeedAnimKey = Animator.StringToHash("Speed");
+    private static readonly int GrabbingAnimKey = Animator.StringToHash("Grabbing");
     
     [SerializeField] private int _inputPlayerId = 0;
     [SerializeField] private float _speed = 20.0f;
@@ -45,21 +46,33 @@ public class Player : MonoBehaviour
 
         if (grab && !_isGrabbing)
         {
-            _isGrabbing = true;
-            if (AttemptToGrab(out var person))
-            {
-                _grabbedPerson = person;
-                _grabbedPerson.AttemptToBreakFree(this);
-            }
+            Grab();
         }
         else if (!grab && _isGrabbing)
         {
-            _isGrabbing = false;
-            if (_grabbedPerson != null)
-            {
-                _grabbedPerson.BreakFree();
-                _grabbedPerson = null;
-            }
+            ReleaseGrab();
+        }
+    }
+
+    private void Grab()
+    {
+        _isGrabbing = true;
+        _animator.SetBool(GrabbingAnimKey, true);
+        if (AttemptToGrab(out var person))
+        {
+            _grabbedPerson = person;
+            _grabbedPerson.AttemptToBreakFree(this);
+        }
+    }
+
+    private void ReleaseGrab()
+    {
+        _isGrabbing = false;
+        _animator.SetBool(GrabbingAnimKey, false);
+        if (_grabbedPerson != null)
+        {
+            _grabbedPerson.BreakFree();
+            _grabbedPerson = null;
         }
     }
 
