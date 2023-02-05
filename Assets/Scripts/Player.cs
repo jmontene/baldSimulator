@@ -5,6 +5,8 @@ using Rewired;
 public class Player : MonoBehaviour
 {
     private static readonly int SpeedAnimKey = Animator.StringToHash("Speed");
+    private static readonly int GrabbingAnimKey = Animator.StringToHash("Grabbing");
+    private static readonly int GrabbingStartAnimKey = Animator.StringToHash("GrabbingStart");
     
     [SerializeField] private int _inputPlayerId = 0;
     [SerializeField] private float _speed = 20.0f;
@@ -52,25 +54,40 @@ public class Player : MonoBehaviour
 
     private void CheckGrab()
     {
-        var grab = Mathf.CeilToInt(_inputPlayer.GetAxis("Primary")) == 1;
+        var inputValue = _inputPlayer.GetAxis("Primary");
+        var grab = inputValue > 0.1f;
 
         if (grab && !_isGrabbing)
         {
-            _isGrabbing = true;
-            if (AttemptToGrab(out var person))
-            {
-                _grabbedPerson = person;
-                _grabbedPerson.AttemptToBreakFree(this);
-            }
+            Grab();
         }
         else if (!grab && _isGrabbing)
         {
-            _isGrabbing = false;
-            if (_grabbedPerson != null)
-            {
-                _grabbedPerson.BreakFree();
-                _grabbedPerson = null;
-            }
+            ReleaseGrab();
+        }
+    }
+
+    private void Grab()
+    {
+        _isGrabbing = true;
+        
+        _animator.SetTrigger(GrabbingStartAnimKey);
+        if (AttemptToGrab(out var person))
+        {
+            _animator.SetBool(GrabbingAnimKey, true);
+            _grabbedPerson = person;
+            _grabbedPerson.AttemptToBreakFree(this);
+        }
+    }
+
+    private void ReleaseGrab()
+    {
+        _isGrabbing = false;
+        _animator.SetBool(GrabbingAnimKey, false);
+        if (_grabbedPerson != null)
+        {
+            _grabbedPerson.BreakFree();
+            _grabbedPerson = null;
         }
     }
 
@@ -104,6 +121,7 @@ public class Player : MonoBehaviour
         if (!CanMove())
         {
             _rb.velocity = Vector3.zero;
+            _animator.SetFloat(SpeedAnimKey, 0);
             return;
         }
         

@@ -16,7 +16,7 @@ public class NavMeshAgentHandler : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (_agent.isStopped) return;
+        if (!_agent.enabled) return;
         
         if (IsPathCompleted())
         {
@@ -26,14 +26,14 @@ public class NavMeshAgentHandler : MonoBehaviour
     
     public void SetNewDestination(Vector3 position, Action onDestinationReached = null)
     {
-        _agent.isStopped = false;
+        _agent.enabled = true;
         _agent.SetDestination(position);
         _onDestinationReached = onDestinationReached;
     }
     
     public void Stop()
     {
-        _agent.isStopped = true;
+        _agent.enabled = false;
     }
 
     private bool IsPathCompleted()
