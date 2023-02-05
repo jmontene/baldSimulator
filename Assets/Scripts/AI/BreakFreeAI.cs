@@ -13,6 +13,7 @@ public class BreakFreeAI : MonoBehaviour
     [SerializeField] private float _changeSignMaxDelay = 6f;
     [SerializeField] private float _struggleDistance = 1f;
     [SerializeField] private float _escapeTime = 5f;
+    [SerializeField] private TimerUI _timerUI;
 
     public Action OnReleased { get; set; }
     
@@ -30,6 +31,7 @@ public class BreakFreeAI : MonoBehaviour
 
     public void Init(Player holder)
     {
+        _timerUI.Show();
         _holder = holder;
         _startDirection = GetCurrentDirection();
         _currentEscapeTime = _escapeTime;
@@ -126,5 +128,6 @@ public class BreakFreeAI : MonoBehaviour
         }
         _holder = null;
         OnReleased.Invoke();
+        _timerUI.Hide();
     }
 }
