@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
 
     public void OnPersonEscaped(PersonAI person)
     {
-        if (person.HasHair)
+        if (!person.HasHair)
         {
             _escapedPersonsBald++;
         }
