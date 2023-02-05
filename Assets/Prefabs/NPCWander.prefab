@@ -3357,6 +3357,8 @@ MonoBehaviour:
   _angleSpeed: 40
   _changeSignMinDelay: 0.5
   _changeSignMaxDelay: 2
+  _struggleDistance: 0.1
+  _escapeTime: 5
 --- !u!114 &8602967924987487493
 MonoBehaviour:
   m_ObjectHideFlags: 0

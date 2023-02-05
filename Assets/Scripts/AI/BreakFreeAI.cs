@@ -11,6 +11,8 @@ public class BreakFreeAI : MonoBehaviour
     [SerializeField] private float _angleSpeed = 10f;
     [SerializeField] private float _changeSignMinDelay = 3f;
     [SerializeField] private float _changeSignMaxDelay = 6f;
+    [SerializeField] private float _struggleDistance = 1f;
+    [SerializeField] private float _escapeTime = 5f;
 
     public Action OnReleased { get; set; }
     
@@ -18,6 +20,8 @@ public class BreakFreeAI : MonoBehaviour
     private Vector3 _startDirection;
     private int _currentSign = 1;
     private float _changeSignDelay;
+    private float _currentEscapeTime = 0f;
+    private float _currentDefeatTime = 0f;
     
     private void Start()
     {
@@ -28,12 +32,33 @@ public class BreakFreeAI : MonoBehaviour
     {
         _holder = holder;
         _startDirection = GetCurrentDirection();
+        _currentEscapeTime = _escapeTime;
+        _currentDefeatTime = holder.DefeatTime;
+
         SetChangeSignDelay();
     }
 
     private Vector3 GetCurrentDirection()
     {
         return (transform.position - _holder.transform.position).normalized;
+    }
+
+    private bool HolderHasCorrectInput() {
+        Vector3 holderInput = _holder.GetInputVector();
+        float correctSignX = 0f;
+        float correctSignZ = 0f;
+        float xDiff = transform.position.x - _holder.transform.position.x;
+        float zDiff = transform.position.z - _holder.transform.position.z;
+
+        if (Mathf.Abs(xDiff) > _struggleDistance) {
+            correctSignX = (xDiff > 0) ? -1f : 1f; 
+        }
+
+        if (Mathf.Abs(zDiff) > _struggleDistance) {
+            correctSignZ = (zDiff > 0) ? -1f : 1f;
+        }
+
+        return Mathf.Sign(holderInput.x) == correctSignX && Mathf.Sign(holderInput.z) == correctSignZ;
     }
 
     // Update is called once per frame
@@ -52,7 +77,24 @@ public class BreakFreeAI : MonoBehaviour
         var movement = currentAngle - startAngle;
         RotateAround(_holder.transform.position, Vector3.up, movement);
     }
-    
+
+    private void Update() {
+        if (_holder == null) return;
+
+        if (HolderHasCorrectInput()) {
+            _currentDefeatTime -= Time.deltaTime;
+            if (_currentDefeatTime <= 0) {
+                Destroy(gameObject);
+            }
+        } else {
+            _currentEscapeTime -= Time.deltaTime;
+            if (_currentEscapeTime <= 0) {
+                _holder.Stun();
+                Release();
+            }
+        }
+    }
+
     private void RotateAround(Vector3 origin, Vector3 axis, float angle)
     {
         var q = Quaternion.AngleAxis(angle, axis);
@@ -80,5 +122,6 @@ public class BreakFreeAI : MonoBehaviour
     public void Release()
     {
         _holder = null;
+        OnReleased.Invoke();
     }
 }

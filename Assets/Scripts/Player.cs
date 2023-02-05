@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
     [SerializeField] private int _inputPlayerId = 0;
     [SerializeField] private float _speed = 20.0f;
     [SerializeField] private float _rotationSpeed = 1f;
+    [SerializeField] private float _stunTime = 2f;
+    public float DefeatTime = 3f;
 
     [Header("Grab Raycast")]
     [SerializeField] private float _raycastRadius = 1f;
@@ -22,6 +24,8 @@ public class Player : MonoBehaviour
     private bool _isGrabbing;
     private PersonAI _grabbedPerson;
     private Collider[] _colliders;
+    private bool _stunned = false;
+    private float _currentStunTime = 0f;
 
     private void Awake()
     {
@@ -35,6 +39,13 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        if (_stunned) {
+            _currentStunTime -= Time.deltaTime;
+            if (_currentStunTime <= 0f) {
+                _stunned = false;
+            }
+            return;
+        }
         CheckGrab();
         UpdateMovement();
     }
@@ -106,9 +117,17 @@ public class Player : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
     }
 
-    public Vector3 GetMovementDirection()
-    {
-        var inputVector = new Vector3(_inputPlayer.GetAxisRaw("Horizontal"), 0f, _inputPlayer.GetAxisRaw("Vertical"));
+    public Vector3 GetInputVector() {
+        return new Vector3(_inputPlayer.GetAxisRaw("Horizontal"), 0f, _inputPlayer.GetAxisRaw("Vertical"));
+    }
+
+    public void Stun() {
+        _stunned = true;
+        _currentStunTime = _stunTime;
+    }
+
+    public Vector3 GetMovementDirection() {
+        var inputVector = GetInputVector();
         
         var movementDirection = _camera.transform.TransformDirection(inputVector);
         movementDirection.y = 0f;
