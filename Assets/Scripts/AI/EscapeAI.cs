@@ -25,9 +25,9 @@ public class EscapeAI : MonoBehaviour
         _agent.SetNewDestination(escapePoint, OnEscapePointReached);
     }
 
-    private void OnEscapePointReached()
+    private static void OnEscapePointReached()
     {
-        Destroy(gameObject);
+        
     }
 
     public void Stop()

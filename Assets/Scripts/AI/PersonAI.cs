@@ -19,7 +19,7 @@ public class PersonAI : MonoBehaviour
     [SerializeField] private BreakFreeAI _breakFreeAI;
 
     [SerializeField] private State _currentState;
-    
+
     private void Start()
     {
         _currentState = State.None;
@@ -85,5 +85,10 @@ public class PersonAI : MonoBehaviour
         }
 
         _currentState = newState;
+    }
+
+    public bool IsEscaping()
+    {
+        return _currentState == State.Escape;
     }
 }
