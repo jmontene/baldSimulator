@@ -27,6 +27,8 @@ public class PersonAI : MonoBehaviour
     private bool _hasHair = true;
     private Animator _animator;
 
+    public bool HasHair => _hasHair;
+
     private void Start()
     {
         _animator = GetComponentInChildren<Animator>();

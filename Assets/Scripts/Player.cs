@@ -28,11 +28,13 @@ public class Player : MonoBehaviour
     private Collider[] _colliders;
     private bool _stunned = false;
     private float _currentStunTime = 0f;
+    private GameManager _gameManager;
     
     public float DefeatTime => _defeatTime;
 
     private void Awake()
     {
+        _gameManager = FindObjectOfType<GameManager>();
         _colliders = new Collider[10];
         _rb = GetComponent<Rigidbody>();
         _animator = GetComponentInChildren<Animator>();
@@ -43,6 +45,8 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        if (_gameManager.IsGameFinished()) return;
+        
         if (_stunned)
         {
             _currentStunTime -= Time.deltaTime;
