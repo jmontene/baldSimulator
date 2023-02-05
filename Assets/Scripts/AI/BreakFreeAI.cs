@@ -48,7 +48,8 @@ public class BreakFreeAI : MonoBehaviour
 
     private bool HolderHasCorrectInput()
     {
-        var holderInput = _holder.GetInputVector();
+        var holderInput = _holder.GetMovementDirection();
+        
         var position = transform.position;
         var holderPosition = _holder.transform.position;
         
